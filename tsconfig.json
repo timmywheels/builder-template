@@ -3,11 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@app/*": ["./apps/*/src"],
+      "@apps/*": ["./apps/*/src"],
       "@packages/*": ["./packages/*/src"]
-    },
-    "composite": true
+    }
   },
   "references": [{ "path": "./apps/api" }, { "path": "./packages/utils" }],
   "files": []
