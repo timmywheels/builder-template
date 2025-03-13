@@ -3,10 +3,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@app/*": ["./apps/*/src"],
+      "@packages/*": ["./packages/*/src"]
     },
     "composite": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
-} 
+  "references": [{ "path": "./apps/api" }, { "path": "./packages/utils" }],
+  "files": []
+}
