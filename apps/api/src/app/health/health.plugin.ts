@@ -12,10 +12,11 @@ const plugin: FastifyPluginCallback = (fastify, _opts, done) => {
 
   // register routes
   fastify.register(autoload, {
-    dir: path.join(__dirname, "./"),
+    dir: path.join(__dirname),
     matchFilter: /\.routes\.ts$/,
     autoHooks: true,
     cascadeHooks: true,
+    encapsulate: false,
   });
 
   done();

@@ -8,15 +8,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const plugin: FastifyPluginCallback = (fastify, _opts, done) => {
-  // add decorators
-  console.log("auth plugin");
-
-  // register routes
   fastify.register(autoload, {
-    dir: path.join(__dirname, "./"),
+    dir: path.join(__dirname),
     matchFilter: /\.routes\.ts$/,
     autoHooks: true,
     cascadeHooks: true,
+    encapsulate: false,
   });
 
   done();
