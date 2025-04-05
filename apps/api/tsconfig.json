@@ -6,7 +6,14 @@
     "composite": true,
     "sourceMap": true,
     "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "NodeNext",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/app/*": ["src/modules/*"],
+      "@/config/*": ["./src/config/*"],
+      "@/types/*": ["./src/types/*"]
+    }
   },
   "include": ["./src/**/*"],
   "compileOnSave": true

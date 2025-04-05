@@ -33,8 +33,6 @@ function getLogger(env: string) {
 }
 
 async function main(opts: AppOptions = {}) {
-  // create fastify instance
-  console.log("process.env.NODE_ENV", process.env.NODE_ENV);
   const fastify = Fastify({
     logger: getLogger(process.env.NODE_ENV!) ?? opts.logger,
   }).withTypeProvider<ZodTypeProvider>();
@@ -43,21 +41,33 @@ async function main(opts: AppOptions = {}) {
   fastify.setValidatorCompiler(validatorCompiler);
   fastify.setSerializerCompiler(serializerCompiler);
 
+  // register env
+  await fastify.register(fastifyEnv, { dotenv: true, schema: configSchema });
+
+  // register global plugins
+  await fastify.register(autoload, {
+    dir: path.join(__dirname, "plugins"),
+    autoHooks: true,
+    cascadeHooks: true,
+    encapsulate: false,
+  });
+
+  // print plugins
+  fastify.log.info(fastify.printPlugins());
+
   // register routes
   await fastify.register(autoload, {
-    dir: path.join(__dirname, "routes"),
+    dir: path.join(__dirname, "app"),
     options: {
       prefix: "/api",
     },
+    matchFilter: /\.plugin\.ts$/,
     autoHooks: true,
     cascadeHooks: true,
   });
 
   // print routes
-  fastify.log.info(fastify.printRoutes());
-
-  // register env
-  await fastify.register(fastifyEnv, { schema: configSchema });
+  fastify.log.info(fastify.printRoutes({ commonPrefix: false }));
 
   // start server
   await fastify.listen({ port: fastify.config.PORT });

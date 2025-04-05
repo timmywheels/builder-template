@@ -1,0 +1,22 @@
+version: "3.6"
+services:
+  database:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      DB_NAME: ${DB_NAME:-postgres}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      - app
+volumes:
+  db_data:
+
+networks:
+  app:
+    driver: bridge

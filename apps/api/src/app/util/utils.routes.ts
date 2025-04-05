@@ -5,7 +5,7 @@ import { capitalize, slugify, formatCurrency, formatDate } from "@app/utils";
 const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
   // String utilities demo endpoint
   fastify.get(
-    "/utils/string/:text",
+    "/string/:text",
     {
       schema: {
         params: z.object({
@@ -44,7 +44,7 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
 
   // Number utilities demo endpoint
   fastify.get(
-    "/utils/currency/:amount",
+    "/currency/:amount",
     {
       schema: {
         params: z.object({
@@ -79,7 +79,7 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
 
   // Date utilities demo endpoint
   fastify.get(
-    "/utils/date",
+    "/date",
     {
       schema: {
         querystring: z.object({
