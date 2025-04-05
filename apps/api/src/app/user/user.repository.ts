@@ -10,18 +10,31 @@ export class UserRepository {
   }
 
   async getUserByEmail(email: string) {
-    return this.fastify.db.selectFrom("user").where("email", "=", email).executeTakeFirst();
+    return this.fastify.db
+      .selectFrom("user")
+      .selectAll()
+      .where("email", "=", email.toLowerCase())
+      .executeTakeFirst();
   }
 
   async createUser(user: InsertObject<DB, "user">) {
-    return this.fastify.db.insertInto("user").values(user).execute();
+    return this.fastify.db.insertInto("user").values(user).returningAll().executeTakeFirst();
   }
 
   async updateUser(id: string, user: UpdateObject<DB, "user">) {
-    return this.fastify.db.updateTable("user").set(user).where("id", "=", id).execute();
+    return this.fastify.db
+      .updateTable("user")
+      .set(user)
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirst();
   }
 
   async deleteUser(id: string) {
-    return this.fastify.db.deleteFrom("user").where("id", "=", id).execute();
+    return this.fastify.db
+      .deleteFrom("user")
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirst();
   }
 }

@@ -15,8 +15,9 @@ export const db = new Kysely<DB>({
   }),
 });
 
-const database: FastifyPluginCallback = (fastify, _opts) => {
+const database: FastifyPluginCallback = (fastify, _opts, done) => {
   fastify.decorate("db", db);
+  done();
 };
 
 export default database;

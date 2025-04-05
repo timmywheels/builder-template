@@ -1,25 +1,15 @@
 import { FastifyPluginCallback } from "fastify";
-import path from "path";
-import autoload from "@fastify/autoload";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import healthRoutes from "./health.routes.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const plugin: FastifyPluginCallback = (fastify, _opts, done) => {
+const health: FastifyPluginCallback = (fastify, _opts, done) => {
   // add decorators
 
   // register routes
-  fastify.register(autoload, {
-    dir: path.join(__dirname),
-    matchFilter: /\.routes\.ts$/,
-    autoHooks: true,
-    cascadeHooks: true,
-    encapsulate: false,
+  fastify.register(healthRoutes, {
+    prefix: "/health",
   });
 
   done();
 };
 
-export default plugin;
+export default health;

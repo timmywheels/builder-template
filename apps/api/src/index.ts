@@ -55,12 +55,15 @@ async function main(opts: AppOptions = {}) {
   // register routes
   await fastify.register(autoload, {
     dir: path.join(__dirname, "app"),
-    dirNameRoutePrefix: true,
     matchFilter: /\.plugin\.ts$/,
     autoHooks: true,
     cascadeHooks: true,
     encapsulate: false,
+    dirNameRoutePrefix: true,
   });
+
+  // print plugins
+  fastify.log.info(fastify.printPlugins());
 
   // print routes
   fastify.log.info(fastify.printRoutes({ commonPrefix: false }));

@@ -12,7 +12,6 @@ const oauth: FastifyPluginAsync = async (fastify, _opts) => {
       },
       auth: FastifyOauth2.default.GOOGLE_CONFIGURATION,
     },
-    startRedirectPath: "/auth/google",
     callbackUri: `${fastify.config.API_BASE_URL}/auth/google/callback`,
   });
 };

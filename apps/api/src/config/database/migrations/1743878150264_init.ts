@@ -7,11 +7,11 @@ export async function up(db: Kysely<any>): Promise<void> {
   // For more info, see: https://kysely.dev/docs/migrations
   await db.schema
     .createTable("user")
-    .addColumn("id", "uuid", (col) => col.primaryKey())
+    .addColumn("id", "uuid", (col) => col.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("email", "varchar(255)", (col) => col.notNull().unique())
     .addColumn("name", "varchar(255)")
     .addColumn("password", "varchar(255)")
-    .addColumn("avatar", "varchar(255)")
+    .addColumn("avatar", "text")
     .addColumn("created_at", "timestamp", (col) => col.notNull().defaultTo(sql`now()`))
     .addColumn("updated_at", "timestamp", (col) => col.notNull().defaultTo(sql`now()`))
     .execute();

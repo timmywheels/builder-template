@@ -13,39 +13,33 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
   });
 
   fastify.get("/google/callback", {}, async (req, res) => {
-    return fastify.oauth2Google.getAccessTokenFromAuthorizationCodeFlow(
-      req,
-      res,
-      async (err, result) => {
-        if (err) {
-          fastify.log.error(err);
-          return res.status(500).send("Error getting access token");
-        }
+    const { token } = await fastify.oauth2Google.getAccessTokenFromAuthorizationCodeFlow(req);
 
-        const userInfo = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo`, {
-          headers: {
-            Authorization: `Bearer ${result.token.access_token}`,
-          },
-        });
+    const userInfo = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    });
 
-        const userInfoData: GoogleUser = await userInfo.json();
+    const userInfoData: GoogleUser = await userInfo.json();
+    console.log("userInfoData__", userInfoData);
+    const existingUser = await fastify.user.repository.user.getUserByEmail(userInfoData.email);
 
-        // check if user exists
-        const existingUser = await fastify.user.repository.user.getUserByEmail(userInfoData.email);
+    if (existingUser) {
+      console.log("existingUser__", existingUser);
+      return res.status(200).send(existingUser);
+    }
 
-        if (existingUser) {
-          return res.status(200).send("User already exists");
-        }
+    await fastify.user.repository.user.createUser({
+      email: userInfoData.email,
+      name: userInfoData.name,
+      avatar: userInfoData.picture,
+    });
+    // get user
+    const user = await fastify.user.repository.user.getUserByEmail(userInfoData.email);
+    console.log("user__", user);
 
-        const user = await fastify.user.repository.user.createUser({
-          email: userInfoData.email,
-          name: userInfoData.name,
-          avatar: userInfoData.picture,
-        });
-
-        return res.status(200).send("User created");
-      }
-    );
+    return res.status(200).send(user);
   });
   done();
 };

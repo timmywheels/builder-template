@@ -1,32 +1,22 @@
 import { FastifyPluginCallback } from "fastify";
-import path from "path";
-import autoload from "@fastify/autoload";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import { UserRepository } from "./user.repository.js";
+import userRoutes from "./user.routes.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const plugin: FastifyPluginCallback = (fastify, _opts, done) => {
+const user: FastifyPluginCallback = (fastify, _opts, done) => {
   fastify.decorate("user", {
     repository: {
       user: new UserRepository(fastify),
     },
   });
 
-  fastify.register(autoload, {
-    dir: path.join(__dirname),
-    matchFilter: /\.routes\.ts$/,
-    autoHooks: true,
-    cascadeHooks: true,
-    encapsulate: false,
+  fastify.register(userRoutes, {
+    prefix: "/user",
   });
 
   done();
 };
 
-export default plugin;
+export default user;
 
 declare module "fastify" {
   interface FastifyInstance {
