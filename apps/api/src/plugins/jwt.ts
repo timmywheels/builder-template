@@ -1,10 +1,9 @@
 import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
-import FastifyJwt, { FastifyJwtNamespace } from "@fastify/jwt";
+import fastifyJwt from "@fastify/jwt";
 
 const jwt: FastifyPluginAsync = async (fastify, _opts) => {
-  fastify.register(FastifyJwt, {
+  await fastify.register(fastifyJwt, {
     secret: fastify.config.JWT_SECRET,
-    namespace: "security",
   });
 
   fastify.decorate("authenticate", async function (request: FastifyRequest, reply: FastifyReply) {
@@ -17,10 +16,6 @@ const jwt: FastifyPluginAsync = async (fastify, _opts) => {
 };
 
 export default jwt;
-
-declare module "fastify" {
-  interface FastifyInstance extends FastifyJwtNamespace<{ namespace: "security" }> {}
-}
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
