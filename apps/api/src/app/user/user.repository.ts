@@ -5,8 +5,12 @@ import { InsertObject, UpdateObject } from "kysely";
 export class UserRepository {
   constructor(private fastify: FastifyInstance) {}
 
-  async getUser(id: string) {
-    return this.fastify.db.selectFrom("user").where("id", "=", id).executeTakeFirst();
+  async getUserById(id: string) {
+    return this.fastify.db
+      .selectFrom("user")
+      .select(["id", "email", "name", "avatar"])
+      .where("id", "=", id)
+      .executeTakeFirst();
   }
 
   async getUserByEmail(email: string) {

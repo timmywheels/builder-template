@@ -1,6 +1,7 @@
 import { FastifyPluginCallbackZodOpenApi } from "fastify-zod-openapi";
 import { GoogleUser } from "./auth.schema.js";
 import { z } from "zod";
+import { UserNotFoundError } from "./auth.errors.js";
 
 const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
   fastify.get("/google", {}, (req, res) => {
@@ -73,13 +74,40 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
     },
     async (req, res) => {
       const { email, password, name, avatar } = req.body;
+      const hashedPassword = await fastify.auth.services.auth.hashValue(password);
       const token = await fastify.auth.services.auth.register({
         email,
-        password,
+        password: hashedPassword,
         name: name ?? null,
         avatar: avatar ?? null,
       });
       return res.status(200).send({ token });
+    }
+  );
+
+  fastify.get(
+    "/me",
+    {
+      onRequest: [fastify.authenticate],
+      schema: {
+        response: {
+          200: z.object({
+            data: z.object({
+              id: z.string(),
+              email: z.string(),
+              name: z.string().nullable(),
+              avatar: z.string().nullable(),
+            }),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const user = await fastify.user.repository.user.getUserById(request.user.id);
+      if (!user) {
+        throw new UserNotFoundError();
+      }
+      return reply.status(200).send({ data: user });
     }
   );
 };

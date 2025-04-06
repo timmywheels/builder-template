@@ -7,6 +7,10 @@
       "@packages/*": ["./packages/*/src"]
     }
   },
-  "references": [{ "path": "./apps/api" }, { "path": "./packages/utils" }],
+  "references": [
+    { "path": "./apps/api" },
+    { "path": "./packages/utils" },
+    { "path": "./packages/database" }
+  ],
   "files": []
 }

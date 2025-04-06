@@ -1,0 +1,30 @@
+{
+  "name": "@app/database",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "codegen": "kysely-codegen --out-file src/index.ts --default-schema public",
+    "db:migrate": "kysely migrate up",
+    "db:migrate:down": "kysely migrate down",
+    "db:migrate:list": "kysely migrate list",
+    "db:migrate:make": "kysely migrate make",
+    "db:seed": "kysely seed",
+    "db:seed:make": "kysely seed make",
+    "db:seed:list": "kysely seed list"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "kysely": "^0.27.6",
+    "kysely-codegen": "^0.18.3",
+    "kysely-ctl": "^0.12.1",
+    "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1"
+  }
+}

@@ -1,5 +1,5 @@
 import { Kysely, PostgresDialect } from "kysely";
-import { DB } from "@/types/db/db.schema.js";
+import { DB } from "@app/database";
 import pg from "pg";
 import { FastifyPluginCallback } from "fastify";
 import { assert } from "console";

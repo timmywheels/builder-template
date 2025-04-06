@@ -1,4 +1,4 @@
-import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyPluginAsync, FastifyPluginCallback, FastifyReply, FastifyRequest } from "fastify";
 import fastifyJwt from "@fastify/jwt";
 
 const jwt: FastifyPluginAsync = async (fastify, _opts) => {
@@ -24,5 +24,11 @@ declare module "@fastify/jwt" {
       id: string;
       email: string;
     };
+  }
+}
+
+declare module "fastify" {
+  interface FastifyInstance {
+    authenticate: any;
   }
 }

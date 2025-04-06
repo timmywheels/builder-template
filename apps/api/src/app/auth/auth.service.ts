@@ -1,21 +1,30 @@
 import { FastifyInstance } from "fastify";
 import bcrypt from "bcryptjs";
+import {
+  InvalidCredentialsError,
+  UnknownUserCreationError,
+  UserAlreadyExistsError,
+  UserNotFoundError,
+  UserRegisteredWithSocialLoginError,
+} from "./auth.errors.js";
 export class AuthService {
   constructor(private readonly fastify: FastifyInstance) {}
 
   async login(params: { email: string; password: string }): Promise<string> {
     const user = await this.fastify.user.repository.user.getUserByEmail(params.email);
     if (!user) {
-      throw new Error("Invalid credentials");
+      throw new UserNotFoundError();
     }
 
     if (!user.password) {
-      throw new Error("User registered with social login");
+      // user with email exists but not with password
+      // which indicates that the user registered with social login
+      throw new UserRegisteredWithSocialLoginError();
     }
 
     const isPasswordValid = await this.validatePassword(params.password, user.password);
     if (!isPasswordValid) {
-      throw new Error("Invalid credentials");
+      throw new InvalidCredentialsError();
     }
 
     return this.generateToken(user.id);
@@ -27,6 +36,11 @@ export class AuthService {
     password?: string | null;
     avatar?: string | null;
   }) {
+    const existingUser = await this.fastify.user.repository.user.getUserByEmail(params.email);
+    if (existingUser) {
+      throw new UserAlreadyExistsError();
+    }
+
     const user = await this.fastify.user.repository.user.createUser({
       email: params.email,
       name: params.name,
@@ -35,7 +49,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error("Failed to create user");
+      throw new UnknownUserCreationError();
     }
 
     return this.generateToken(user.id);
@@ -47,5 +61,9 @@ export class AuthService {
 
   private validatePassword(rawPassword: string, hashedPassword: string) {
     return bcrypt.compare(rawPassword, hashedPassword);
+  }
+
+  async hashValue(value: string) {
+    return bcrypt.hash(value, 10);
   }
 }

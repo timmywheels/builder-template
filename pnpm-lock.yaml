@@ -10,6 +10,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@app/database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@app/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -19,6 +22,9 @@ importers:
       '@fastify/env':
         specifier: ^5.0.2
         version: 5.0.2
+      '@fastify/error':
+        specifier: ^4.1.0
+        version: 4.1.0
       '@fastify/jwt':
         specifier: ^9.1.0
         version: 9.1.0
@@ -43,9 +49,6 @@ importers:
       kysely:
         specifier: ^0.27.6
         version: 0.27.6
-      kysely-codegen:
-        specifier: ^0.18.3
-        version: 0.18.3(kysely@0.27.6)(pg@8.14.1)(typescript@5.8.2)
       oauth2:
         specifier: link:@types/@fastify/oauth2
         version: link:@types/@fastify/oauth2
@@ -68,9 +71,6 @@ importers:
       fastify-cli:
         specifier: ^7.4.0
         version: 7.4.0
-      kysely-ctl:
-        specifier: ^0.12.1
-        version: 0.12.1(kysely@0.27.6)
       prettier:
         specifier: ^3.1.0
         version: 3.5.3
@@ -86,6 +86,28 @@ importers:
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
+
+  packages/database:
+    dependencies:
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
+      kysely:
+        specifier: ^0.27.6
+        version: 0.27.6
+      kysely-codegen:
+        specifier: ^0.18.3
+        version: 0.18.3(kysely@0.27.6)(pg@8.14.1)(typescript@5.8.2)
+      kysely-ctl:
+        specifier: ^0.12.1
+        version: 0.12.1(kysely@0.27.6)
+      pg:
+        specifier: ^8.14.1
+        version: 8.14.1
+    devDependencies:
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
 
   packages/utils:
     devDependencies:
