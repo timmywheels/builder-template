@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist && pnpm codegen",
     "build": "tsc",
     "codegen": "kysely-codegen --out-file src/index.ts --default-schema public",
     "db:migrate": "kysely migrate up",
