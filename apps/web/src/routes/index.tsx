@@ -1,4 +1,4 @@
-import Hero from "@/components/tailwind/hero";
+import Hero from "@/components/hero";
 import { createFileRoute } from "@tanstack/react-router";
 import Header from "@/components/tailwind/header";
 
