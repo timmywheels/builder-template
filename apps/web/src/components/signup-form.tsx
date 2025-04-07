@@ -23,14 +23,7 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
     }
 
     register({ email, password, name: name || undefined });
-
-    // Setup navigation after successful registration
-    setTimeout(() => {
-      const token = localStorage.getItem("auth_token");
-      if (token) {
-        navigate({ to: "/dashboard" });
-      }
-    }, 1000); // Small delay to allow the auth state to update
+    // Navigation is now handled at the route level via beforeLoad
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoginPending, loginError } = useAuth();
+  const { login, isLoginPending, loginError, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,17 +22,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     }
 
     login({ email, password });
-
-    // Setup navigation after successful login
-    // This could also be handled with a useEffect listening to auth state
-    // or in the onSuccess callback of the mutation
-    setTimeout(() => {
-      const token = localStorage.getItem("auth_token");
-      if (token) {
-        navigate({ to: "/dashboard" });
-      }
-    }, 1000); // Small delay to allow the auth state to update
+    // Navigation is now handled at the route level via beforeLoad
   };
+
+  useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
+    if (isAuthenticated) {
+      navigate({ to: "/dashboard" });
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

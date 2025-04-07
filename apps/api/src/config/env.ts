@@ -7,12 +7,23 @@ declare module "fastify" {
       GOOGLE_CLIENT_SECRET: string;
       JWT_SECRET: string;
       DATABASE_URL: string;
+      SENDGRID_API_KEY: string;
     };
   }
 }
 
 export const configSchema = {
   type: "object",
+  required: [
+    "PORT",
+    "API_BASE_URL",
+    "NODE_ENV",
+    "DATABASE_URL",
+    "JWT_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "SENDGRID_API_KEY",
+  ],
   properties: {
     PORT: {
       type: "string",
@@ -34,6 +45,9 @@ export const configSchema = {
       type: "string",
     },
     GOOGLE_CLIENT_SECRET: {
+      type: "string",
+    },
+    SENDGRID_API_KEY: {
       type: "string",
     },
   },
