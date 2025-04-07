@@ -67,7 +67,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   </svg>
                   Login with Apple
                 </Button>
-                <a href={`/api/auth/google`}>
+                <a href={`${import.meta.env.VITE_API_BASE_URL}/auth/google`}>
                   <Button variant="outline" className="w-full" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                       <path

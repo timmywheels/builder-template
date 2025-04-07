@@ -3,7 +3,9 @@ import FastifyOauth2 from "@fastify/oauth2";
 
 const oauth: FastifyPluginAsync = async (fastify, _opts) => {
   await fastify.register(FastifyOauth2.default, {
-    name: "Google", // naming here is weird, refer to the docs if changing this
+    // library automatically prepends `oauth` to the name,
+    // so in the declaration merging below, we use `oauth2Google`
+    name: "Google",
     scope: ["email", "profile", "openid"],
     credentials: {
       client: {
@@ -13,6 +15,10 @@ const oauth: FastifyPluginAsync = async (fastify, _opts) => {
       auth: FastifyOauth2.default.GOOGLE_CONFIGURATION,
     },
     callbackUri: `${fastify.config.API_BASE_URL}/auth/google/callback`,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    },
   });
 };
 

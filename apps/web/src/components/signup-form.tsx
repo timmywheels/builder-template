@@ -88,8 +88,7 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
               {registerError && (
                 <Alert variant="destructive">
                   <AlertDescription className="flex items-center justify-center">
-                    {registerError?.response?.data?.error ||
-                      "Failed to register. Please try again."}
+                    {registerError.message || "Failed to register. Please try again."}
                   </AlertDescription>
                 </Alert>
               )}
@@ -104,7 +103,11 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
                   </svg>
                   Sign up with Apple
                 </Button>
-                <a href={`/api/auth/google`}>
+                <a
+                  href={`${
+                    import.meta.env.VITE_OAUTH_BASE_URL || "http://localhost:5000"
+                  }/auth/google`}
+                >
                   <Button variant="outline" className="w-full" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                       <path
