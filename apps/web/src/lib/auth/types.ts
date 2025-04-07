@@ -25,6 +25,25 @@ export interface UserResponse {
   data: User;
 }
 
+export interface PasswordResetRequest {
+  email: string;
+}
+
+export interface ConfirmAccountRequest {
+  email: string;
+  token: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  password: string;
+  token: string;
+}
+
+export interface AccountConfirmationRequest {
+  email: string;
+}
+
 export interface AuthState {
   user: User | null | undefined;
   isAuthenticated: boolean;

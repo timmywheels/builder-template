@@ -44,6 +44,11 @@ export class AuthService {
     isSso?: boolean;
   }) {
     const existingUser = await this.fastify.user.repository.user.getUserByEmail(params.email);
+
+    if (existingUser && !existingUser.isAccountConfirmed) {
+      throw new UserNotConfirmedError();
+    }
+
     if (existingUser) {
       throw new UserAlreadyExistsError();
     }
@@ -72,9 +77,8 @@ export class AuthService {
     return this.generateToken(user.id);
   }
 
-  async confirmAccount(params: { email: string; token: string }) {
-    const user = await this.fastify.user.repository.user.getUserByEmailAndAccountConfirmationToken({
-      email: params.email,
+  async confirmAccount(params: { token: string }) {
+    const user = await this.fastify.user.repository.user.getUserByAccountConfirmationToken({
       accountConfirmationToken: params.token,
     });
 
@@ -87,9 +91,8 @@ export class AuthService {
     });
   }
 
-  async resetPassword(params: { email: string; password: string; token: string }) {
-    const user = await this.fastify.user.repository.user.getUserByEmailAndPasswordResetToken({
-      email: params.email,
+  async resetPassword(params: { password: string; token: string }) {
+    const user = await this.fastify.user.repository.user.getUserByPasswordResetToken({
       passwordResetToken: params.token,
     });
 
@@ -137,7 +140,7 @@ export class AuthService {
       <p>
       Please click the link below to reset your password:
       </p>
-      <a href="${this.fastify.config.API_BASE_URL}/auth/reset-password?token=${token}">
+      <a href="${this.fastify.config.WEB_BASE_URL}/api/auth/reset-password?token=${token}">
       Reset Password
       </a>
       `,
@@ -156,7 +159,7 @@ export class AuthService {
       <p>
       Please click the link below to confirm your account:
       </p>
-      <a href="${this.fastify.config.API_BASE_URL}/auth/confirm-account?token=${token}">
+      <a href="${this.fastify.config.WEB_BASE_URL}/api/auth/confirm-account?token=${token}">
       Confirm Account
       </a>
       `,

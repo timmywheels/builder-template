@@ -1,8 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ForgotPasswordForm } from "@/components/forgot-password-form";
 import { Brand } from "@/components/brand";
+import { z } from "zod";
+
 export const Route = createFileRoute("/forgot-password")({
   component: RouteComponent,
+  validateSearch: z.object({
+    pending: z.string().optional(),
+  }),
 });
 
 function RouteComponent() {

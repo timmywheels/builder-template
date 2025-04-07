@@ -1,8 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ResetPasswordForm } from "@/components/reset-password-form";
 import { Brand } from "@/components/brand";
+import { z } from "zod";
+
 export const Route = createFileRoute("/reset-password")({
   component: RouteComponent,
+  validateSearch: z.object({
+    token: z.string().optional(),
+    email: z.string().optional(),
+    pending: z.boolean().optional(),
+  }),
 });
 
 function RouteComponent() {

@@ -29,7 +29,7 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
 
     if (existingUser) {
       const token = fastify.jwt.sign({ id: existingUser.id }, { expiresIn: "30d" });
-      return res.status(200).send({ token });
+      return res.redirect(`${fastify.config.WEB_BASE_URL}/login?token=${token}`);
     }
 
     const token = await fastify.auth.services.auth.register({
@@ -149,24 +149,25 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
     }
   );
 
-  fastify.post(
+  fastify.get(
     "/confirm-account",
     {
       schema: {
         description: "Confirm account",
-        body: z.object({
-          email: z.string(),
+        querystring: z.object({
           token: z.string(),
         }),
       },
     },
     async (request, reply) => {
-      const { email, token } = request.body;
-      await fastify.auth.services.auth.confirmAccount({ email, token });
-      const user = await fastify.user.repository.user.getUserByEmail(email);
+      const { token } = request.query;
+      const user = await fastify.user.repository.user.getUserByAccountConfirmationToken({
+        accountConfirmationToken: token,
+      });
       if (!user) {
         throw new UserNotFoundError();
       }
+      await fastify.auth.services.auth.confirmAccount({ token });
       const accessToken = fastify.jwt.sign({ id: user.id });
       return reply.redirect(`${fastify.config.WEB_BASE_URL}/login?token=${accessToken}`);
     }
@@ -178,20 +179,21 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
       schema: {
         description: "Reset password",
         body: z.object({
-          email: z.string(),
           password: z.string(),
           token: z.string(),
         }),
       },
     },
     async (request, reply) => {
-      const { email, password, token } = request.body;
-      const hashedPassword = await fastify.auth.services.auth.hashValue(password);
-      await fastify.auth.services.auth.resetPassword({ email, password: hashedPassword, token });
-      const user = await fastify.user.repository.user.getUserByEmail(email);
+      const { password, token } = request.body;
+      const user = await fastify.user.repository.user.getUserByPasswordResetToken({
+        passwordResetToken: token,
+      });
       if (!user) {
         throw new UserNotFoundError();
       }
+      const hashedPassword = await fastify.auth.services.auth.hashValue(password);
+      await fastify.auth.services.auth.resetPassword({ password: hashedPassword, token });
       const accessToken = fastify.jwt.sign({ id: user.id });
       return reply.redirect(`${fastify.config.WEB_BASE_URL}/login?token=${accessToken}`);
     }

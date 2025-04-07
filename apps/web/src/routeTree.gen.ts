@@ -17,6 +17,7 @@ import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as PrivacyPolicyImport } from './routes/privacy-policy'
 import { Route as LoginImport } from './routes/login'
 import { Route as ForgotPasswordImport } from './routes/forgot-password'
+import { Route as ConfirmAccountImport } from './routes/confirm-account'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
@@ -59,6 +60,12 @@ const ForgotPasswordRoute = ForgotPasswordImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ConfirmAccountRoute = ConfirmAccountImport.update({
+  id: '/confirm-account',
+  path: '/confirm-account',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
@@ -86,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/confirm-account': {
+      id: '/confirm-account'
+      path: '/confirm-account'
+      fullPath: '/confirm-account'
+      preLoaderRoute: typeof ConfirmAccountImport
       parentRoute: typeof rootRoute
     }
     '/forgot-password': {
@@ -151,6 +165,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/confirm-account': typeof ConfirmAccountRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -163,6 +178,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/confirm-account': typeof ConfirmAccountRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -176,6 +192,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/confirm-account': typeof ConfirmAccountRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -190,6 +207,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/confirm-account'
     | '/forgot-password'
     | '/login'
     | '/privacy-policy'
@@ -201,6 +219,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/confirm-account'
     | '/forgot-password'
     | '/login'
     | '/privacy-policy'
@@ -212,6 +231,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/confirm-account'
     | '/forgot-password'
     | '/login'
     | '/privacy-policy'
@@ -225,6 +245,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConfirmAccountRoute: typeof ConfirmAccountRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -237,6 +258,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConfirmAccountRoute: ConfirmAccountRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
@@ -258,6 +280,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/confirm-account",
         "/forgot-password",
         "/login",
         "/privacy-policy",
@@ -270,6 +293,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/confirm-account": {
+      "filePath": "confirm-account.tsx"
     },
     "/forgot-password": {
       "filePath": "forgot-password.tsx"

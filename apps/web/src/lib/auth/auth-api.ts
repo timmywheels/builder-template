@@ -1,5 +1,14 @@
 import { apiClient } from "../api";
-import { AuthResponse, LoginCredentials, RegisterCredentials, UserResponse } from "./types";
+import {
+  AccountConfirmationRequest,
+  AuthResponse,
+  ConfirmAccountRequest,
+  LoginCredentials,
+  PasswordResetRequest,
+  RegisterCredentials,
+  ResetPasswordRequest,
+  UserResponse,
+} from "./types";
 
 /**
  * Authentication API service
@@ -35,5 +44,35 @@ export const authApi = {
    */
   logout: (): void => {
     localStorage.removeItem("auth_token");
+  },
+
+  /**
+   * Request a password reset email
+   */
+  requestPasswordReset: async (data: PasswordResetRequest): Promise<void> => {
+    await apiClient.post("/auth/password-reset", data);
+  },
+
+  /**
+   * Reset password with token
+   */
+  resetPassword: async (data: ResetPasswordRequest): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>("/auth/reset-password", data);
+    return response.data;
+  },
+
+  /**
+   * Request account confirmation email
+   */
+  requestAccountConfirmation: async (data: AccountConfirmationRequest): Promise<void> => {
+    await apiClient.post("/auth/account-confirmation", data);
+  },
+
+  /**
+   * Confirm account with token
+   */
+  confirmAccount: async (data: ConfirmAccountRequest): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>("/auth/confirm-account", data);
+    return response.data;
   },
 };

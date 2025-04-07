@@ -6,13 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoginPending, loginError, isAuthenticated } = useAuth();
+  const { login, isLoginPending, loginError, isAuthenticated, refreshUser } = useAuth();
   const navigate = useNavigate();
+  const search = useSearch({ from: "/login" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,16 +22,22 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       return;
     }
 
-    login({ email, password });
+    await login({ email, password });
     // Navigation is now handled at the route level via beforeLoad
   };
 
   useEffect(() => {
+    // Check for token in URL (from email links)
+    if (search.token && !isAuthenticated) {
+      localStorage.setItem("auth_token", search.token);
+      refreshUser();
+    }
+
     console.log("isAuthenticated", isAuthenticated);
     if (isAuthenticated) {
       navigate({ to: "/dashboard" });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, search.token, refreshUser]);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

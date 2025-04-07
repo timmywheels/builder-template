@@ -21,23 +21,18 @@ export class UserRepository {
       .executeTakeFirst();
   }
 
-  async getUserByEmailAndPasswordResetToken(params: { email: string; passwordResetToken: string }) {
+  async getUserByPasswordResetToken(params: { passwordResetToken: string }) {
     return this.fastify.db
       .selectFrom("user")
       .selectAll()
-      .where("email", "=", params.email)
       .where("passwordResetToken", "=", params.passwordResetToken)
       .executeTakeFirst();
   }
 
-  async getUserByEmailAndAccountConfirmationToken(params: {
-    email: string;
-    accountConfirmationToken: string;
-  }) {
+  async getUserByAccountConfirmationToken(params: { accountConfirmationToken: string }) {
     return this.fastify.db
       .selectFrom("user")
       .selectAll()
-      .where("email", "=", params.email)
       .where("accountConfirmationToken", "=", params.accountConfirmationToken)
       .executeTakeFirst();
   }

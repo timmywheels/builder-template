@@ -1,9 +1,15 @@
 import { LoginForm } from "@/components/login-form";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Brand } from "@/components/brand";
+import { z } from "zod";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
+  validateSearch: z.object({
+    token: z.string().optional(),
+    redirect: z.string().optional(),
+    pending: z.boolean().optional(),
+  }),
   beforeLoad: ({ context }) => {
     if (context.auth.isAuthenticated) {
       throw redirect({
