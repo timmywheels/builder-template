@@ -1,4 +1,4 @@
-import { Kysely, PostgresDialect } from "kysely";
+import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
 import { DB } from "@app/database";
 import pg from "pg";
 import { FastifyPluginCallback } from "fastify";
@@ -13,6 +13,7 @@ export const db = new Kysely<DB>({
       connectionString: process.env.DATABASE_URL,
     }),
   }),
+  plugins: [new CamelCasePlugin()],
 });
 
 const database: FastifyPluginCallback = (fastify, _opts, done) => {

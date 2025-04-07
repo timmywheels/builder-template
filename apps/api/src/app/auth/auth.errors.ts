@@ -25,3 +25,5 @@ export const UnknownUserCreationError = createError(
   "Unknown user creation error",
   500
 );
+
+export const UserNotConfirmedError = createError("USER_NOT_CONFIRMED", "User not confirmed", 400);

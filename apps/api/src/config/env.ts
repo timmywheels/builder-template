@@ -8,6 +8,8 @@ declare module "fastify" {
       JWT_SECRET: string;
       DATABASE_URL: string;
       SENDGRID_API_KEY: string;
+      SENDGRID_FROM_EMAIL: string;
+      WEB_BASE_URL: string;
     };
   }
 }
@@ -23,6 +25,8 @@ export const configSchema = {
     "GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET",
     "SENDGRID_API_KEY",
+    "SENDGRID_FROM_EMAIL",
+    "WEB_BASE_URL",
   ],
   properties: {
     PORT: {
@@ -48,6 +52,12 @@ export const configSchema = {
       type: "string",
     },
     SENDGRID_API_KEY: {
+      type: "string",
+    },
+    SENDGRID_FROM_EMAIL: {
+      type: "string",
+    },
+    WEB_BASE_URL: {
       type: "string",
     },
   },

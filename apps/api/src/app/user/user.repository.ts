@@ -1,4 +1,4 @@
-import { DB } from "@/types/db/db.schema.js";
+import { DB } from "@app/database";
 import { FastifyInstance } from "fastify";
 import { InsertObject, UpdateObject } from "kysely";
 
@@ -8,7 +8,7 @@ export class UserRepository {
   async getUserById(id: string) {
     return this.fastify.db
       .selectFrom("user")
-      .select(["id", "email", "name", "avatar"])
+      .select(["id", "email", "name", "avatar", "isAccountConfirmed", "isOnboarded"])
       .where("id", "=", id)
       .executeTakeFirst();
   }
@@ -18,6 +18,27 @@ export class UserRepository {
       .selectFrom("user")
       .selectAll()
       .where("email", "=", email.toLowerCase())
+      .executeTakeFirst();
+  }
+
+  async getUserByEmailAndPasswordResetToken(params: { email: string; passwordResetToken: string }) {
+    return this.fastify.db
+      .selectFrom("user")
+      .selectAll()
+      .where("email", "=", params.email)
+      .where("passwordResetToken", "=", params.passwordResetToken)
+      .executeTakeFirst();
+  }
+
+  async getUserByEmailAndAccountConfirmationToken(params: {
+    email: string;
+    accountConfirmationToken: string;
+  }) {
+    return this.fastify.db
+      .selectFrom("user")
+      .selectAll()
+      .where("email", "=", params.email)
+      .where("accountConfirmationToken", "=", params.accountConfirmationToken)
       .executeTakeFirst();
   }
 

@@ -1,5 +1,5 @@
 import { defineConfig } from "kysely-ctl";
-import { PostgresDialect } from "kysely";
+import { CamelCasePlugin, PostgresDialect } from "kysely";
 import { Pool } from "pg";
 
 const dialect = new PostgresDialect({
@@ -10,6 +10,7 @@ const dialect = new PostgresDialect({
 
 export default defineConfig({
   dialect,
+  plugins: [new CamelCasePlugin()],
   migrations: {
     migrationFolder: "./src/migrations",
   },

@@ -37,9 +37,10 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
       name: userInfoData.name ?? null,
       avatar: userInfoData.picture ?? null,
       password: null,
+      isSso: true,
     });
 
-    return res.status(200).send({ token });
+    return res.redirect(`${fastify.config.WEB_BASE_URL}/login?token=${token}`);
   });
   done();
 
@@ -75,13 +76,14 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
     async (req, res) => {
       const { email, password, name, avatar } = req.body;
       const hashedPassword = await fastify.auth.services.auth.hashValue(password);
-      const token = await fastify.auth.services.auth.register({
+      await fastify.auth.services.auth.register({
         email,
         password: hashedPassword,
         name: name ?? null,
         avatar: avatar ?? null,
+        isSso: false,
       });
-      return res.status(200).send({ token });
+      return res.redirect(`${fastify.config.WEB_BASE_URL}/signup?pending=true`);
     }
   );
 
@@ -108,6 +110,90 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
         throw new UserNotFoundError();
       }
       return reply.status(200).send({ data: user });
+    }
+  );
+
+  fastify.post(
+    "/account-confirmation",
+    {
+      schema: {
+        description: "Send account confirmation email",
+        body: z.object({
+          email: z.string(),
+        }),
+      },
+    },
+    async (request, reply) => {
+      const { email } = request.body;
+      const token = await fastify.auth.services.auth.generateToken(email);
+      await fastify.auth.services.auth.sendAccountConfirmationEmail(email, token);
+      return reply.redirect(`${fastify.config.WEB_BASE_URL}/signup?pending=true`);
+    }
+  );
+
+  fastify.post(
+    "/password-reset",
+    {
+      schema: {
+        description: "Send password reset email",
+        body: z.object({
+          email: z.string(),
+        }),
+      },
+    },
+    async (request, reply) => {
+      const { email } = request.body;
+      const token = await fastify.auth.services.auth.generateToken(email);
+      await fastify.auth.services.auth.sendPasswordResetEmail(email, token);
+      return reply.redirect(`${fastify.config.WEB_BASE_URL}/forgot-password?pending=true`);
+    }
+  );
+
+  fastify.post(
+    "/confirm-account",
+    {
+      schema: {
+        description: "Confirm account",
+        body: z.object({
+          email: z.string(),
+          token: z.string(),
+        }),
+      },
+    },
+    async (request, reply) => {
+      const { email, token } = request.body;
+      await fastify.auth.services.auth.confirmAccount({ email, token });
+      const user = await fastify.user.repository.user.getUserByEmail(email);
+      if (!user) {
+        throw new UserNotFoundError();
+      }
+      const accessToken = fastify.jwt.sign({ id: user.id });
+      return reply.redirect(`${fastify.config.WEB_BASE_URL}/login?token=${accessToken}`);
+    }
+  );
+
+  fastify.post(
+    "/reset-password",
+    {
+      schema: {
+        description: "Reset password",
+        body: z.object({
+          email: z.string(),
+          password: z.string(),
+          token: z.string(),
+        }),
+      },
+    },
+    async (request, reply) => {
+      const { email, password, token } = request.body;
+      const hashedPassword = await fastify.auth.services.auth.hashValue(password);
+      await fastify.auth.services.auth.resetPassword({ email, password: hashedPassword, token });
+      const user = await fastify.user.repository.user.getUserByEmail(email);
+      if (!user) {
+        throw new UserNotFoundError();
+      }
+      const accessToken = fastify.jwt.sign({ id: user.id });
+      return reply.redirect(`${fastify.config.WEB_BASE_URL}/login?token=${accessToken}`);
     }
   );
 };
