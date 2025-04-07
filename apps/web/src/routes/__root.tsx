@@ -1,6 +1,7 @@
-import { Outlet, createRootRoute, createRootRouteWithContext } from "@tanstack/react-router";
+import { AuthState } from "@/lib/auth";
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { AuthProvider, AuthState } from "@/store/auth-provider";
+import { Toaster } from "sonner";
 
 interface AppContext {
   auth: AuthState;
@@ -14,6 +15,7 @@ function RootComponent() {
   return (
     <>
       <Outlet />
+      <Toaster />
       <TanStackRouterDevtools position="bottom-right" />
     </>
   );
