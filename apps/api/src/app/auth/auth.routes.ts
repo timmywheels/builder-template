@@ -28,7 +28,7 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
     const existingUser = await fastify.user.repository.user.getUserByEmail(userInfoData.email);
 
     if (existingUser) {
-      const token = fastify.jwt.sign({ id: existingUser.id }, { expiresIn: "30d" });
+      const token = fastify.jwt.sign({ id: existingUser.id });
       return res.redirect(`${fastify.config.WEB_BASE_URL}/login?token=${token}`);
     }
 
