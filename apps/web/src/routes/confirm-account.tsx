@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useSearch, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";

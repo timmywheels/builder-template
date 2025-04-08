@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Route as SignupRoute } from "@/routes/signup";
 
 export function SignupForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
@@ -23,7 +23,6 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
     requestAccountConfirmation,
     isAccountConfirmationRequestPending,
   } = useAuth();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

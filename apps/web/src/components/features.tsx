@@ -1,5 +1,4 @@
 import { Activity, Zap, Shield, LineChart, Layers, Code } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const features = [
   {

@@ -1,7 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { QuoteIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface Testimonial {
   quote: string;

@@ -35,7 +35,6 @@ export interface ConfirmAccountRequest {
 }
 
 export interface ResetPasswordRequest {
-  email: string;
   password: string;
   token: string;
 }

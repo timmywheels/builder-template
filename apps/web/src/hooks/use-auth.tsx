@@ -1,10 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import {
-  useQuery,
-  useMutation,
-  UseMutationResult,
-} from "@tanstack/react-query";
-import { getQueryFn, apiRequest, queryClient } from "@/lib/queryClient";
+import { useQuery, useMutation, UseMutationResult } from "@tanstack/react-query";
+import { getQueryFn, apiRequest, queryClient } from "@/lib/query-client";
 import { useToast } from "@/hooks/use-toast";
 
 // User type that matches the API response
@@ -58,12 +54,12 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
   const [isResendingVerification, setIsResendingVerification] = useState(false);
-  
+
   const {
     data: authData,
     error,
     isLoading,
-  } = useQuery<{user: User | null, isAuthenticated: boolean}, Error>({
+  } = useQuery<{ user: User | null; isAuthenticated: boolean }, Error>({
     queryKey: ["/api/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
   });
@@ -72,18 +68,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     mutationFn: async (credentials: LoginCredentials) => {
       try {
         const res = await apiRequest("POST", "/api/auth/login", credentials);
-        
+
         // Check for verification error (403 status)
         if (res.status === 403) {
           const data = await res.json();
           // If this is a verification error, throw with the needsVerification flag
           if (data.needsVerification) {
-            throw new Error(data.message || "Email verification required", {
-              cause: { needsVerification: true, email: data.email }
-            });
+            throw new Error(data.message || "Email verification required");
           }
         }
-        
+
         return await res.json();
       } catch (err) {
         // Re-throw the error to be handled in onError
@@ -91,9 +85,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(["/api/user"], { 
+      queryClient.setQueryData(["/api/user"], {
         user: data.user,
-        isAuthenticated: true 
+        isAuthenticated: true,
       });
       toast({
         title: "Login successful",
@@ -110,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           description: error.message,
           variant: "destructive",
         });
-        
+
         // If we received an email in the error, we can offer to resend verification
         if (errorCause?.email) {
           // We could trigger auto-resend here, but better to give the user control
@@ -133,9 +127,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await apiRequest("POST", "/api/auth/logout");
     },
     onSuccess: () => {
-      queryClient.setQueryData(["/api/user"], { 
-        user: null, 
-        isAuthenticated: false 
+      queryClient.setQueryData(["/api/user"], {
+        user: null,
+        isAuthenticated: false,
       });
       toast({
         title: "Logout successful",
@@ -150,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
     },
   });
-  
+
   const registerMutation = useMutation({
     mutationFn: async (credentials: RegisterCredentials) => {
       const res = await apiRequest("POST", "/api/auth/register", credentials);
@@ -159,18 +153,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onSuccess: (data) => {
       // Check if the user needs email verification
       const needsVerification = data.needsVerification === true;
-      
+
       if (needsVerification) {
         // Don't set authenticated if verification is needed
         toast({
           title: "Registration successful",
-          description: "Please check your email for a verification link to complete your registration.",
+          description:
+            "Please check your email for a verification link to complete your registration.",
         });
       } else {
         // Set user data if no verification needed (e.g., Google OAuth)
-        queryClient.setQueryData(["/api/user"], { 
+        queryClient.setQueryData(["/api/user"], {
           user: data.user,
-          isAuthenticated: true 
+          isAuthenticated: true,
         });
         toast({
           title: "Registration successful",
@@ -189,31 +184,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const user = authData?.user || null;
   const isAuthenticated = authData?.isAuthenticated || false;
-  
+
   // Function to resend verification email
   const resendVerificationEmail = async (email: string) => {
     if (!email) return;
-    
+
     try {
       setIsResendingVerification(true);
-      const response = await apiRequest('POST', '/api/auth/resend-verification', { email });
-      
+      const response = await apiRequest("POST", "/api/auth/resend-verification", { email });
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to resend verification email');
+        throw new Error(errorData.message || "Failed to resend verification email");
       }
-      
+
       const data = await response.json();
-      
+
       toast({
-        title: 'Verification email sent',
-        description: data.message || 'Please check your inbox for the verification link.',
+        title: "Verification email sent",
+        description: data.message || "Please check your inbox for the verification link.",
       });
     } catch (error) {
       toast({
-        title: 'Failed to resend verification email',
-        description: error instanceof Error ? error.message : 'An unexpected error occurred',
-        variant: 'destructive',
+        title: "Failed to resend verification email",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive",
       });
     } finally {
       setIsResendingVerification(false);

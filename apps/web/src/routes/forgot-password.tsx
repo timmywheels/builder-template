@@ -6,7 +6,7 @@ import { z } from "zod";
 export const Route = createFileRoute("/forgot-password")({
   component: RouteComponent,
   validateSearch: z.object({
-    pending: z.string().optional(),
+    pending: z.boolean().optional(),
   }),
 });
 

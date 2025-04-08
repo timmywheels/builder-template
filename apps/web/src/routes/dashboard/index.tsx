@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import data from "../../app/dashboard/data.json";
+import data from "./data.json";
 
 export const Route = createFileRoute("/dashboard/")({
   component: RouteComponent,

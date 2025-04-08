@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
-import { useLocation } from 'wouter';
+import { useEffect } from "react";
+import { useLocation } from "@tanstack/react-router";
 
 /**
  * Hook that resets scroll position to top when location/route changes
  */
 export function useScrollReset() {
   // Get the current location from wouter
-  const [location] = useLocation();
+  const location = useLocation();
 
   // Effect runs when location changes
   useEffect(() => {
@@ -14,7 +14,7 @@ export function useScrollReset() {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'auto' // Using 'auto' instead of 'smooth' for immediate reset
+      behavior: "auto", // Using 'auto' instead of 'smooth' for immediate reset
     });
   }, [location]); // Re-run when location changes
 

@@ -4,7 +4,6 @@ import {
   AuthResponse,
   LoginCredentials,
   RegisterCredentials,
-  User,
   PasswordResetRequest,
   ResetPasswordRequest,
   AccountConfirmationRequest,

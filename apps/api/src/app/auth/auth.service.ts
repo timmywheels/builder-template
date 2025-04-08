@@ -140,7 +140,7 @@ export class AuthService {
       <p>
       Please click the link below to reset your password:
       </p>
-      <a href="${this.fastify.config.WEB_BASE_URL}/api/auth/reset-password?token=${token}">
+      <a href="${this.fastify.config.WEB_BASE_URL}/reset-password?pending=true&token=${token}">
       Reset Password
       </a>
       `,
@@ -159,7 +159,7 @@ export class AuthService {
       <p>
       Please click the link below to confirm your account:
       </p>
-      <a href="${this.fastify.config.WEB_BASE_URL}/api/auth/confirm-account?token=${token}">
+      <a href="${this.fastify.config.WEB_BASE_URL}/confirm-account?pending=true&token=${token}">
       Confirm Account
       </a>
       `,

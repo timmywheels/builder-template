@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSearch } from "@tanstack/react-router";
+import { useSearch, useNavigate } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "./ui/button";
@@ -9,11 +9,13 @@ import { Label } from "./ui/label";
 import { Alert, AlertDescription } from "./ui/alert";
 import { Link } from "@tanstack/react-router";
 import { Route as ForgotPasswordRoute } from "@/routes/forgot-password";
+import { Mail } from "lucide-react";
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const search = useSearch({ from: ForgotPasswordRoute.id });
-  const isPending = search.pending === "true";
+  const navigate = useNavigate({ from: ForgotPasswordRoute.id });
+  const isPending = Boolean(search.pending);
   const { requestPasswordReset, isPasswordResetRequestPending, passwordResetRequestError } =
     useAuth();
 
@@ -24,7 +26,20 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
       return;
     }
 
-    requestPasswordReset({ email });
+    try {
+      await requestPasswordReset({ email });
+
+      // Add pending query parameter to show check email state
+      await navigate({
+        search: {
+          ...search,
+          pending: "true",
+        },
+        replace: true,
+      });
+    } catch (error) {
+      // Error handling is already done by useAuth
+    }
   };
 
   if (isPending) {
@@ -38,9 +53,12 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-center">
-              <p className="mb-4">
-                Please check your email and click the link to reset your password.
+            <div className="flex flex-col items-center justify-center py-6">
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+                <Mail className="h-8 w-8 text-primary" />
+              </div>
+              <p className="text-center text-sm text-muted-foreground max-w-xs mb-6">
+                Please check your inbox and follow the instructions to reset your password.
               </p>
               <Link to="/login">
                 <Button variant="outline" className="w-full">
