@@ -10,8 +10,8 @@ import {
   ConfirmAccountRequest,
 } from "./types";
 import { getApiError } from "../api";
-import { useCallback } from "react";
-
+import { useCallback, useState } from "react";
+import Cookie from "js-cookie";
 // Query keys for caching
 export const AUTH_QUERY_KEYS = {
   user: ["auth", "user"],
@@ -28,9 +28,8 @@ export function useRegister() {
   return useMutation<AuthResponse, Error, RegisterCredentials>({
     mutationFn: (credentials) => authApi.register(credentials),
     onSuccess: (data) => {
-      // Store the token in localStorage
-      localStorage.setItem("auth_token", data.token);
-
+      // Store the token in cookie
+      Cookie.set("token", data.token);
       // Invalidate the user query to force a refetch
       queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.user });
     },
@@ -51,9 +50,8 @@ export function useLogin() {
   return useMutation<AuthResponse, Error, LoginCredentials>({
     mutationFn: (credentials) => authApi.login(credentials),
     onSuccess: (data) => {
-      // Store the token in localStorage
-      localStorage.setItem("auth_token", data.token);
-
+      // Store the token in cookie
+      Cookie.set("token", data.token);
       // Invalidate the user query to force a refetch
       queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.user });
     },
@@ -79,6 +77,7 @@ export function useLogout() {
     onSuccess: () => {
       // Clear the user from the cache
       queryClient.setQueryData(AUTH_QUERY_KEYS.user, null);
+      Cookie.remove("token");
     },
   });
 }
@@ -88,7 +87,7 @@ export function useLogout() {
  * Returns the current user data or null if not authenticated
  */
 export function useUser() {
-  const isAuthenticated = Boolean(localStorage.getItem("auth_token"));
+  const isAuthenticated = Boolean(Cookie.get("token"));
 
   return useQuery({
     queryKey: AUTH_QUERY_KEYS.user,
@@ -96,8 +95,8 @@ export function useUser() {
     select: (data) => data.data,
     enabled: isAuthenticated, // Only run if we have a token
     staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
-    refetchOnWindowFocus: true,
-    retry: 1, // Only retry once if it fails
+    refetchOnWindowFocus: false, // Don't refetch on window focus to avoid delays
+    retry: 0, // Don't retry to speed up the process when unsuccessful
   });
 }
 
@@ -120,8 +119,8 @@ export function useResetPassword() {
   return useMutation<AuthResponse, Error, ResetPasswordRequest>({
     mutationFn: (data) => authApi.resetPassword(data),
     onSuccess: (data) => {
-      // Store the token in localStorage
-      localStorage.setItem("auth_token", data.token);
+      // Store the token in cookie
+      Cookie.set("token", data.token);
     },
     onError: (error) => {
       return Promise.reject(getApiError(error));
@@ -150,8 +149,8 @@ export function useConfirmAccount() {
   return useMutation<AuthResponse, Error, ConfirmAccountRequest>({
     mutationFn: (data) => authApi.confirmAccount(data),
     onSuccess: (data) => {
-      // Store the token in localStorage
-      localStorage.setItem("auth_token", data.token);
+      // Store the token in cookie
+      Cookie.set("token", data.token);
 
       // Invalidate the user query to force a refetch
       queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.user });
@@ -168,8 +167,11 @@ export function useConfirmAccount() {
  */
 export function useAuth() {
   const { data: user, isLoading, error, refetch } = useUser();
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Initialize from both token and user data
+    return Boolean(Cookie.get("token") || user);
+  });
 
-  const isAuthenticated = Boolean(user);
   const queryClient = useQueryClient();
 
   const loginMutation = useLogin();
@@ -188,16 +190,24 @@ export function useAuth() {
 
   // Clear all auth state
   const clearAuth = useCallback(() => {
-    localStorage.removeItem("auth_token");
+    Cookie.remove("token");
     queryClient.setQueryData(AUTH_QUERY_KEYS.user, null);
   }, [queryClient]);
 
   // Login helper
   const login = useCallback(
-    (credentials: LoginCredentials) => {
-      return loginMutation.mutate(credentials);
+    (credentials: LoginCredentials, options?: { onSuccess?: () => void }) => {
+      return loginMutation.mutate(credentials, {
+        onSuccess: () => {
+          setIsAuthenticated(true);
+          // Navigate immediately, don't wait for refresh
+          options?.onSuccess?.();
+          // Refresh user data in the background
+          refreshUser();
+        },
+      });
     },
-    [loginMutation]
+    [loginMutation, refreshUser]
   );
 
   // Register helper
@@ -210,8 +220,9 @@ export function useAuth() {
 
   // Logout helper
   const logout = useCallback(() => {
+    setIsAuthenticated(false);
     return logoutMutation.mutate();
-  }, [logoutMutation]);
+  }, [logoutMutation, setIsAuthenticated]);
 
   // Request password reset helper
   const requestPasswordReset = useCallback(
@@ -249,6 +260,8 @@ export function useAuth() {
     // State
     user,
     isAuthenticated,
+    setIsAuthenticated,
+
     isLoading,
     error,
 

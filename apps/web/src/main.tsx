@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider } from "@tanstack/react-router";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { AuthProvider, useAuth } from "@/lib/auth";
-
+import Cookie from "js-cookie";
 import { router } from "./router";
 import "./index.css";
 
@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     // Check authentication status on app start
-    if (localStorage.getItem("auth_token")) {
+    if (Cookie.get("token")) {
       auth.refreshUser();
     }
   }, [auth]);

@@ -144,6 +144,10 @@ const routes: FastifyPluginCallbackZodOpenApi = (fastify, _opts, done) => {
     async (request, reply) => {
       const { email } = request.body;
       const token = await fastify.auth.services.auth.generateToken(email);
+      await fastify.user.repository.user.updateUserPasswordResetToken({
+        where: { email },
+        data: { passwordResetToken: token },
+      });
       await fastify.auth.services.auth.sendPasswordResetEmail(email, token);
       return reply.redirect(`${fastify.config.WEB_BASE_URL}/forgot-password?pending=true`);
     }

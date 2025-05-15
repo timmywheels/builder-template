@@ -9,6 +9,7 @@ import {
   ResetPasswordRequest,
   UserResponse,
 } from "./types";
+import Cookie from "js-cookie";
 
 /**
  * Authentication API service
@@ -43,7 +44,7 @@ export const authApi = {
    * Log out the current user (client-side only)
    */
   logout: (): void => {
-    localStorage.removeItem("auth_token");
+    Cookie.remove("token");
   },
 
   /**

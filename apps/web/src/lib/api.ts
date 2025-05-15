@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookie from "js-cookie";
 
 // API client with default configurations
 export const apiClient = axios.create({
@@ -10,7 +11,7 @@ export const apiClient = axios.create({
 
 // Request interceptor - adds auth token to requests
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("auth_token");
+  const token = Cookie.get("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -23,7 +24,7 @@ apiClient.interceptors.response.use(
   (error) => {
     // Handle specific error cases here (e.g., 401 unauthorized)
     if (error.response?.status === 401) {
-      localStorage.removeItem("auth_token");
+      Cookie.remove("token");
       // If we have a router, we could redirect to login
       // window.location.href = "/login";
     }

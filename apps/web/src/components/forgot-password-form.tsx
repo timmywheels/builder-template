@@ -33,7 +33,7 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
       await navigate({
         search: {
           ...search,
-          pending: "true",
+          pending: true,
         },
         replace: true,
       });

@@ -7,11 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import Cookie from "js-cookie";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoginPending, loginError, isAuthenticated, refreshUser } = useAuth();
+  const { login, isLoginPending, loginError, isAuthenticated, refreshUser, setIsAuthenticated } =
+    useAuth();
   const navigate = useNavigate();
   const search = useSearch({ from: "/login" });
 
@@ -22,22 +24,25 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       return;
     }
 
-    await login({ email, password });
-    // Navigation is now handled at the route level via beforeLoad
+    login(
+      { email, password },
+      {
+        onSuccess: () => {
+          navigate({ to: "/dashboard" });
+        },
+      }
+    );
   };
 
   useEffect(() => {
     // Check for token in URL (from email links)
     if (search.token && !isAuthenticated) {
-      localStorage.setItem("auth_token", search.token);
+      Cookie.set("token", search.token);
       refreshUser();
-    }
-
-    console.log("isAuthenticated", isAuthenticated);
-    if (isAuthenticated) {
+      setIsAuthenticated(true);
       navigate({ to: "/dashboard" });
     }
-  }, [isAuthenticated, navigate, search.token, refreshUser]);
+  }, [search.token, isAuthenticated, navigate, refreshUser, setIsAuthenticated]);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

@@ -21,11 +21,41 @@ export class UserRepository {
       .executeTakeFirst();
   }
 
+  async updateUserPasswordResetToken(params: {
+    where: { email: string };
+    data: { passwordResetToken: string };
+  }) {
+    return this.fastify.db
+      .updateTable("user")
+      .set(params.data)
+      .where("email", "=", params.where.email)
+      .executeTakeFirst();
+  }
+
   async getUserByPasswordResetToken(params: { passwordResetToken: string }) {
     return this.fastify.db
       .selectFrom("user")
       .selectAll()
       .where("passwordResetToken", "=", params.passwordResetToken)
+      .executeTakeFirst();
+  }
+
+  async updateUserPassword(params: { where: { email: string }; data: { password: string } }) {
+    return this.fastify.db
+      .updateTable("user")
+      .set(params.data)
+      .where("email", "=", params.where.email)
+      .executeTakeFirst();
+  }
+
+  async updateUserAccountConfirmationToken(params: {
+    where: { email: string };
+    data: { accountConfirmationToken: string };
+  }) {
+    return this.fastify.db
+      .updateTable("user")
+      .set(params.data)
+      .where("email", "=", params.where.email)
       .executeTakeFirst();
   }
 
