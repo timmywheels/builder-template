@@ -49,6 +49,14 @@ export {
   Bell as IconNotification,
   UserCircle as IconUserCircle,
 
+  // Icons used in analytics page
+  DollarSign as IconDollarSign,
+  Activity as IconActivity,
+  Eye as IconEye,
+
+  // Icons used in projects page
+  Calendar as IconCalendar,
+
   // Type for icon props
   type LucideIcon as Icon,
 } from "lucide-react";

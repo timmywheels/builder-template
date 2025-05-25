@@ -21,6 +21,11 @@ import { Route as ConfirmAccountImport } from './routes/confirm-account'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as DashboardTeamImport } from './routes/dashboard/team'
+import { Route as DashboardSettingsImport } from './routes/dashboard/settings'
+import { Route as DashboardProjectsImport } from './routes/dashboard/projects'
+import { Route as DashboardLifecycleImport } from './routes/dashboard/lifecycle'
+import { Route as DashboardAnalyticsImport } from './routes/dashboard/analytics'
 
 // Create/Update Routes
 
@@ -84,6 +89,36 @@ const AdminIndexRoute = AdminIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardTeamRoute = DashboardTeamImport.update({
+  id: '/dashboard/team',
+  path: '/dashboard/team',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardSettingsRoute = DashboardSettingsImport.update({
+  id: '/dashboard/settings',
+  path: '/dashboard/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardProjectsRoute = DashboardProjectsImport.update({
+  id: '/dashboard/projects',
+  path: '/dashboard/projects',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardLifecycleRoute = DashboardLifecycleImport.update({
+  id: '/dashboard/lifecycle',
+  path: '/dashboard/lifecycle',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardAnalyticsRoute = DashboardAnalyticsImport.update({
+  id: '/dashboard/analytics',
+  path: '/dashboard/analytics',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -144,6 +179,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsOfServiceImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/analytics': {
+      id: '/dashboard/analytics'
+      path: '/dashboard/analytics'
+      fullPath: '/dashboard/analytics'
+      preLoaderRoute: typeof DashboardAnalyticsImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/lifecycle': {
+      id: '/dashboard/lifecycle'
+      path: '/dashboard/lifecycle'
+      fullPath: '/dashboard/lifecycle'
+      preLoaderRoute: typeof DashboardLifecycleImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/projects': {
+      id: '/dashboard/projects'
+      path: '/dashboard/projects'
+      fullPath: '/dashboard/projects'
+      preLoaderRoute: typeof DashboardProjectsImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/dashboard/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/team': {
+      id: '/dashboard/team'
+      path: '/dashboard/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
@@ -172,6 +242,11 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms-of-service': typeof TermsOfServiceRoute
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/lifecycle': typeof DashboardLifecycleRoute
+  '/dashboard/projects': typeof DashboardProjectsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -185,6 +260,11 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms-of-service': typeof TermsOfServiceRoute
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/lifecycle': typeof DashboardLifecycleRoute
+  '/dashboard/projects': typeof DashboardProjectsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -199,6 +279,11 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/terms-of-service': typeof TermsOfServiceRoute
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/lifecycle': typeof DashboardLifecycleRoute
+  '/dashboard/projects': typeof DashboardProjectsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -214,6 +299,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms-of-service'
+    | '/dashboard/analytics'
+    | '/dashboard/lifecycle'
+    | '/dashboard/projects'
+    | '/dashboard/settings'
+    | '/dashboard/team'
     | '/admin'
     | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
@@ -226,6 +316,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms-of-service'
+    | '/dashboard/analytics'
+    | '/dashboard/lifecycle'
+    | '/dashboard/projects'
+    | '/dashboard/settings'
+    | '/dashboard/team'
     | '/admin'
     | '/dashboard'
   id:
@@ -238,6 +333,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/terms-of-service'
+    | '/dashboard/analytics'
+    | '/dashboard/lifecycle'
+    | '/dashboard/projects'
+    | '/dashboard/settings'
+    | '/dashboard/team'
     | '/admin/'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -252,6 +352,11 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
+  DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
+  DashboardLifecycleRoute: typeof DashboardLifecycleRoute
+  DashboardProjectsRoute: typeof DashboardProjectsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardTeamRoute: typeof DashboardTeamRoute
   AdminIndexRoute: typeof AdminIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
@@ -265,6 +370,11 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
+  DashboardAnalyticsRoute: DashboardAnalyticsRoute,
+  DashboardLifecycleRoute: DashboardLifecycleRoute,
+  DashboardProjectsRoute: DashboardProjectsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardTeamRoute: DashboardTeamRoute,
   AdminIndexRoute: AdminIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
@@ -287,6 +397,11 @@ export const routeTree = rootRoute
         "/reset-password",
         "/signup",
         "/terms-of-service",
+        "/dashboard/analytics",
+        "/dashboard/lifecycle",
+        "/dashboard/projects",
+        "/dashboard/settings",
+        "/dashboard/team",
         "/admin/",
         "/dashboard/"
       ]
@@ -314,6 +429,21 @@ export const routeTree = rootRoute
     },
     "/terms-of-service": {
       "filePath": "terms-of-service.tsx"
+    },
+    "/dashboard/analytics": {
+      "filePath": "dashboard/analytics.tsx"
+    },
+    "/dashboard/lifecycle": {
+      "filePath": "dashboard/lifecycle.tsx"
+    },
+    "/dashboard/projects": {
+      "filePath": "dashboard/projects.tsx"
+    },
+    "/dashboard/settings": {
+      "filePath": "dashboard/settings.tsx"
+    },
+    "/dashboard/team": {
+      "filePath": "dashboard/team.tsx"
     },
     "/admin/": {
       "filePath": "admin/index.tsx"

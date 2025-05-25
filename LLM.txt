@@ -1,0 +1,220 @@
+# Builder Template - LLM.txt
+
+## Project Overview
+Builder Template is a modern, full-stack SaaS monorepo template designed for rapid application development. It provides a complete foundation for building scalable web applications with authentication, project management, team collaboration, and analytics features.
+
+## Architecture
+
+### Monorepo Structure
+```
+builder-template/
+├── apps/
+│   ├── web/          # React frontend (Vite + TypeScript)
+│   └── api/          # Fastify backend (Node.js + TypeScript)
+├── packages/         # Shared packages
+└── docker-compose.yaml
+```
+
+### Technology Stack
+
+#### Frontend (apps/web)
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Routing**: TanStack Router (file-based routing)
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui (Radix UI primitives)
+- **Icons**: Lucide React
+- **Package Manager**: pnpm
+
+#### Backend (apps/api)
+- **Framework**: Fastify with TypeScript
+- **Validation**: Zod schemas
+- **Authentication**: JWT + OAuth2 (Google)
+- **Database**: PostgreSQL with Kysely query builder
+- **Email**: SendGrid integration
+- **API Documentation**: OpenAPI/Swagger
+
+## Key Features
+
+### Authentication System
+- JWT-based authentication
+- Google OAuth2 integration
+- Email verification and password reset
+- Protected routes with auth guards
+- User session management
+
+### Dashboard Pages
+1. **Main Dashboard** (`/dashboard`)
+   - Project overview metrics
+   - Recent activity feed
+   - Quick action shortcuts
+
+2. **Analytics** (`/dashboard/analytics`)
+   - Revenue and user metrics
+   - Performance tracking
+   - Activity monitoring
+
+3. **Projects** (`/dashboard/projects`)
+   - Project management interface
+   - Progress tracking
+   - Status management
+   - Team assignment
+
+4. **Team** (`/dashboard/team`)
+   - Team member management
+   - Role assignments
+   - Activity tracking
+   - Statistics overview
+
+5. **Lifecycle** (`/dashboard/lifecycle`)
+   - Project lifecycle stages
+   - Workflow management
+   - Stage transitions
+   - Performance metrics
+
+6. **Settings** (`/dashboard/settings`)
+   - Profile management
+   - Notification preferences
+   - Application settings
+   - Billing management
+
+### UI/UX Design
+- Responsive design with mobile-first approach
+- Consistent design system using shadcn/ui
+- Sidebar navigation with collapsible menu
+- Breadcrumb navigation
+- Loading states and error handling
+- Clean, minimal aesthetic with rounded-lg borders
+
+## File Structure
+
+### Frontend Key Files
+```
+apps/web/src/
+├── components/
+│   ├── ui/              # shadcn/ui components
+│   ├── app-sidebar.tsx  # Main navigation
+│   ├── nav-*.tsx        # Navigation components
+│   └── icons.tsx        # Centralized icon exports
+├── routes/
+│   ├── __root.tsx       # Root layout
+│   ├── index.tsx        # Landing page
+│   ├── login.tsx        # Authentication
+│   └── dashboard/       # Dashboard pages
+├── lib/
+│   ├── auth.tsx         # Authentication context
+│   └── utils.ts         # Utility functions
+└── hooks/               # Custom React hooks
+```
+
+### Backend Key Files
+```
+apps/api/src/
+├── app/
+│   ├── auth/            # Authentication routes & services
+│   ├── user/            # User management
+│   ├── notification/    # Email services
+│   └── util/            # Utility endpoints
+├── plugins/
+│   ├── jwt.ts           # JWT authentication
+│   ├── auth.ts          # OAuth2 setup
+│   └── database.ts      # Database connection
+└── config/
+    └── env.ts           # Environment configuration
+```
+
+## API Endpoints
+
+### Authentication
+- `POST /auth/login` - User login
+- `POST /auth/register` - User registration
+- `GET /auth/me` - Get current user
+- `GET /auth/google` - Google OAuth initiation
+- `POST /auth/password-reset` - Password reset
+
+### Utilities
+- `GET /util/string/:text` - String manipulation
+- `GET /util/currency/:amount` - Currency formatting
+- `GET /util/date` - Date formatting
+
+### Health & Monitoring
+- `GET /health` - Health check endpoint
+
+## Environment Variables
+
+### Frontend (.env)
+```
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+### Backend (.env)
+```
+PORT=5000
+API_BASE_URL=http://localhost:5000
+WEB_BASE_URL=http://localhost:3000
+DATABASE_URL=postgresql://...
+JWT_SECRET=your-jwt-secret
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+SENDGRID_API_KEY=your-sendgrid-key
+SENDGRID_FROM_EMAIL=noreply@yourapp.com
+```
+
+## Development Workflow
+
+### Getting Started
+1. Clone repository
+2. Install dependencies: `pnpm install`
+3. Set up environment variables
+4. Start database (PostgreSQL)
+5. Run development servers:
+   - Frontend: `pnpm dev` (from apps/web)
+   - Backend: `pnpm dev` (from apps/api)
+
+### Key Commands
+- `pnpm install` - Install all dependencies
+- `pnpm build` - Build all applications
+- `pnpm dev` - Start development servers
+- `pnpm lint` - Run linting
+- `pnpm type-check` - TypeScript checking
+
+## Design Patterns
+
+### Frontend Patterns
+- File-based routing with TanStack Router
+- Component composition with shadcn/ui
+- Custom hooks for state management
+- Context providers for global state
+- Protected route components
+
+### Backend Patterns
+- Plugin-based architecture (Fastify)
+- Repository pattern for data access
+- Service layer for business logic
+- Zod schemas for validation
+- Decorator pattern for route protection
+
+## Security Features
+- JWT token authentication
+- Password hashing with bcrypt
+- CORS configuration
+- Input validation with Zod
+- SQL injection prevention
+- XSS protection
+
+## Deployment Ready
+- Docker configuration included
+- Environment-based configuration
+- Production build optimization
+- Health check endpoints
+- Logging and monitoring setup
+
+## Extensibility
+The template is designed for easy extension:
+- Modular component architecture
+- Plugin-based backend
+- Consistent naming conventions
+- Type-safe development
+- Comprehensive documentation
+
+This template provides a solid foundation for building modern SaaS applications with best practices, security, and scalability in mind. 
