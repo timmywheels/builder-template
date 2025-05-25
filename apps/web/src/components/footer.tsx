@@ -1,6 +1,6 @@
 import { Github, Twitter, Linkedin, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import Logo from "@/assets/buildertemplate-logo-001.svg";
 export default function Footer() {
   return (
     <footer className="bg-foreground text-background">
@@ -9,8 +9,7 @@ export default function Footer() {
           {/* Brand section */}
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-full bg-primary"></div>
-              <span className="text-xl font-bold">SaaS Platform</span>
+              <img src={Logo} alt="Builder Template" className="h-12 w-auto" />
             </div>
             <p className="text-sm text-background/80 max-w-xs">
               Building the future of SaaS development with powerful tools and incredible developer
@@ -148,7 +147,7 @@ export default function Footer() {
         {/* Bottom section with copyright */}
         <div className="mt-12 border-t border-background/10 pt-8">
           <p className="text-sm text-background/70 text-center">
-            &copy; {new Date().getFullYear()} SaaS Platform, Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Builder Template, Inc. All rights reserved.
           </p>
         </div>
       </div>

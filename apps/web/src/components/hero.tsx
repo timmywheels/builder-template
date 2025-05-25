@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useRef } from "react";
-import Icon from "@/assets/icon-space.png";
+import Icon from "@/assets/icon.svg";
 
 // Logo cloud component with horizontal scrolling
 function LogoCloud() {
@@ -102,7 +102,7 @@ export default function Hero() {
               <img src={Icon} alt="icon" className="h-36 w-36" />
             </div>
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
-              Ship it, then scale it
+              This changes everything
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
               Streamline your development process, improve collaboration, and launch faster with our

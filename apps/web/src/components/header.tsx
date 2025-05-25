@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
-import Logo from "@/assets/logo-space.png";
+import Logo from "@/assets/buildertemplate-logo-002.svg";
 const mainNavLinks = [
   { href: "/features", label: "Features" },
   { href: "/pricing", label: "Pricing" },
