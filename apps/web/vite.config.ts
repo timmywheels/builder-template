@@ -1,29 +1,22 @@
-import { defineConfig } from "vite";
-import path from "path";
+import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
+import path from "path";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    TanStackRouterVite({ target: "react", autoCodeSplitting: true }),
-    react(),
-    tailwindcss(),
-  ],
+  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(__dirname, "./app"),
     },
   },
   server: {
     proxy: {
-      "/api": {
-        target: "http://localhost:5000",
-        rewrite: (path) => path.replace(/^\/api/, ""),
+      "/api/auth": {
+        target: "http://localhost:5000", // API runs on port 5000
         changeOrigin: true,
-        secure: false,
-        cookieDomainRewrite: "localhost",
+        rewrite: (path) => path.replace(/^\/api\/auth/, "/auth"),
       },
     },
   },
