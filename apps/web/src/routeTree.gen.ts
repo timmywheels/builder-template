@@ -25,7 +25,10 @@ import { Route as DashboardTeamImport } from './routes/dashboard/team'
 import { Route as DashboardSettingsImport } from './routes/dashboard/settings'
 import { Route as DashboardProjectsImport } from './routes/dashboard/projects'
 import { Route as DashboardLifecycleImport } from './routes/dashboard/lifecycle'
+import { Route as DashboardDeploymentsImport } from './routes/dashboard/deployments'
 import { Route as DashboardAnalyticsImport } from './routes/dashboard/analytics'
+import { Route as DashboardAgentsIndexImport } from './routes/dashboard/agents/index'
+import { Route as DashboardAgentsBuilderImport } from './routes/dashboard/agents/builder'
 
 // Create/Update Routes
 
@@ -113,9 +116,27 @@ const DashboardLifecycleRoute = DashboardLifecycleImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardDeploymentsRoute = DashboardDeploymentsImport.update({
+  id: '/dashboard/deployments',
+  path: '/dashboard/deployments',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const DashboardAnalyticsRoute = DashboardAnalyticsImport.update({
   id: '/dashboard/analytics',
   path: '/dashboard/analytics',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardAgentsIndexRoute = DashboardAgentsIndexImport.update({
+  id: '/dashboard/agents/',
+  path: '/dashboard/agents/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardAgentsBuilderRoute = DashboardAgentsBuilderImport.update({
+  id: '/dashboard/agents/builder',
+  path: '/dashboard/agents/builder',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -186,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAnalyticsImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/deployments': {
+      id: '/dashboard/deployments'
+      path: '/dashboard/deployments'
+      fullPath: '/dashboard/deployments'
+      preLoaderRoute: typeof DashboardDeploymentsImport
+      parentRoute: typeof rootRoute
+    }
     '/dashboard/lifecycle': {
       id: '/dashboard/lifecycle'
       path: '/dashboard/lifecycle'
@@ -228,6 +256,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/agents/builder': {
+      id: '/dashboard/agents/builder'
+      path: '/dashboard/agents/builder'
+      fullPath: '/dashboard/agents/builder'
+      preLoaderRoute: typeof DashboardAgentsBuilderImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/agents/': {
+      id: '/dashboard/agents/'
+      path: '/dashboard/agents'
+      fullPath: '/dashboard/agents'
+      preLoaderRoute: typeof DashboardAgentsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -243,12 +285,15 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/deployments': typeof DashboardDeploymentsRoute
   '/dashboard/lifecycle': typeof DashboardLifecycleRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/team': typeof DashboardTeamRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/agents/builder': typeof DashboardAgentsBuilderRoute
+  '/dashboard/agents': typeof DashboardAgentsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -261,12 +306,15 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/deployments': typeof DashboardDeploymentsRoute
   '/dashboard/lifecycle': typeof DashboardLifecycleRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/team': typeof DashboardTeamRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/agents/builder': typeof DashboardAgentsBuilderRoute
+  '/dashboard/agents': typeof DashboardAgentsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -280,12 +328,15 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/deployments': typeof DashboardDeploymentsRoute
   '/dashboard/lifecycle': typeof DashboardLifecycleRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/team': typeof DashboardTeamRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/agents/builder': typeof DashboardAgentsBuilderRoute
+  '/dashboard/agents/': typeof DashboardAgentsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -300,12 +351,15 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms-of-service'
     | '/dashboard/analytics'
+    | '/dashboard/deployments'
     | '/dashboard/lifecycle'
     | '/dashboard/projects'
     | '/dashboard/settings'
     | '/dashboard/team'
     | '/admin'
     | '/dashboard'
+    | '/dashboard/agents/builder'
+    | '/dashboard/agents'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -317,12 +371,15 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms-of-service'
     | '/dashboard/analytics'
+    | '/dashboard/deployments'
     | '/dashboard/lifecycle'
     | '/dashboard/projects'
     | '/dashboard/settings'
     | '/dashboard/team'
     | '/admin'
     | '/dashboard'
+    | '/dashboard/agents/builder'
+    | '/dashboard/agents'
   id:
     | '__root__'
     | '/'
@@ -334,12 +391,15 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms-of-service'
     | '/dashboard/analytics'
+    | '/dashboard/deployments'
     | '/dashboard/lifecycle'
     | '/dashboard/projects'
     | '/dashboard/settings'
     | '/dashboard/team'
     | '/admin/'
     | '/dashboard/'
+    | '/dashboard/agents/builder'
+    | '/dashboard/agents/'
   fileRoutesById: FileRoutesById
 }
 
@@ -353,12 +413,15 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
+  DashboardDeploymentsRoute: typeof DashboardDeploymentsRoute
   DashboardLifecycleRoute: typeof DashboardLifecycleRoute
   DashboardProjectsRoute: typeof DashboardProjectsRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardTeamRoute: typeof DashboardTeamRoute
   AdminIndexRoute: typeof AdminIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardAgentsBuilderRoute: typeof DashboardAgentsBuilderRoute
+  DashboardAgentsIndexRoute: typeof DashboardAgentsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -371,12 +434,15 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
   DashboardAnalyticsRoute: DashboardAnalyticsRoute,
+  DashboardDeploymentsRoute: DashboardDeploymentsRoute,
   DashboardLifecycleRoute: DashboardLifecycleRoute,
   DashboardProjectsRoute: DashboardProjectsRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardTeamRoute: DashboardTeamRoute,
   AdminIndexRoute: AdminIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardAgentsBuilderRoute: DashboardAgentsBuilderRoute,
+  DashboardAgentsIndexRoute: DashboardAgentsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -398,12 +464,15 @@ export const routeTree = rootRoute
         "/signup",
         "/terms-of-service",
         "/dashboard/analytics",
+        "/dashboard/deployments",
         "/dashboard/lifecycle",
         "/dashboard/projects",
         "/dashboard/settings",
         "/dashboard/team",
         "/admin/",
-        "/dashboard/"
+        "/dashboard/",
+        "/dashboard/agents/builder",
+        "/dashboard/agents/"
       ]
     },
     "/": {
@@ -433,6 +502,9 @@ export const routeTree = rootRoute
     "/dashboard/analytics": {
       "filePath": "dashboard/analytics.tsx"
     },
+    "/dashboard/deployments": {
+      "filePath": "dashboard/deployments.tsx"
+    },
     "/dashboard/lifecycle": {
       "filePath": "dashboard/lifecycle.tsx"
     },
@@ -450,6 +522,12 @@ export const routeTree = rootRoute
     },
     "/dashboard/": {
       "filePath": "dashboard/index.tsx"
+    },
+    "/dashboard/agents/builder": {
+      "filePath": "dashboard/agents/builder.tsx"
+    },
+    "/dashboard/agents/": {
+      "filePath": "dashboard/agents/index.tsx"
     }
   }
 }

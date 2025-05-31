@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import Loader from "@/components/ui/loader";
 import {
   Breadcrumb,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { IconBot, IconCloud, IconRocket, IconUsers, IconPlus, IconEye } from "@/components/icons";
 
 export const Route = createFileRoute("/dashboard/")({
   component: RouteComponent,
@@ -40,11 +41,11 @@ function RouteComponent() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
+                <BreadcrumbLink href="#">Agent Platform</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                <BreadcrumbPage>Dashboard</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -52,9 +53,9 @@ function RouteComponent() {
         <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+              <h1 className="text-3xl font-bold tracking-tight">Agent Dashboard</h1>
               <p className="text-muted-foreground">
-                Welcome back! Here's an overview of your projects and activities.
+                Welcome back! Here's an overview of your AI agents and deployments.
               </p>
             </div>
           </div>
@@ -62,130 +63,78 @@ function RouteComponent() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-lg border bg-card text-card-foreground p-6">
               <div className="flex items-center justify-between space-y-0 pb-2">
-                <h3 className="tracking-tight text-sm font-medium">Total Projects</h3>
-                <svg
-                  className="h-4 w-4 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  />
-                </svg>
+                <h3 className="tracking-tight text-sm font-medium">Total Agents</h3>
+                <IconBot className="h-4 w-4 text-muted-foreground" />
               </div>
-              <div className="text-2xl font-bold">15</div>
-              <p className="text-xs text-muted-foreground">+2 from last month</p>
+              <div className="text-2xl font-bold">3</div>
+              <p className="text-xs text-muted-foreground">1 active, 1 paused, 1 draft</p>
             </div>
 
             <div className="rounded-lg border bg-card text-card-foreground p-6">
               <div className="flex items-center justify-between space-y-0 pb-2">
-                <h3 className="tracking-tight text-sm font-medium">Active Tasks</h3>
-                <svg
-                  className="h-4 w-4 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                  />
-                </svg>
+                <h3 className="tracking-tight text-sm font-medium">Active Deployments</h3>
+                <IconCloud className="h-4 w-4 text-muted-foreground" />
               </div>
-              <div className="text-2xl font-bold">47</div>
-              <p className="text-xs text-muted-foreground">+12 from last week</p>
+              <div className="text-2xl font-bold">2</div>
+              <p className="text-xs text-muted-foreground">Running on Cloudflare</p>
             </div>
 
             <div className="rounded-lg border bg-card text-card-foreground p-6">
               <div className="flex items-center justify-between space-y-0 pb-2">
-                <h3 className="tracking-tight text-sm font-medium">Team Members</h3>
-                <svg
-                  className="h-4 w-4 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                  />
-                </svg>
+                <h3 className="tracking-tight text-sm font-medium">Total Requests</h3>
+                <IconRocket className="h-4 w-4 text-muted-foreground" />
               </div>
-              <div className="text-2xl font-bold">8</div>
-              <p className="text-xs text-muted-foreground">+1 new this month</p>
+              <div className="text-2xl font-bold">2,139</div>
+              <p className="text-xs text-muted-foreground">+12% from last week</p>
             </div>
 
             <div className="rounded-lg border bg-card text-card-foreground p-6">
               <div className="flex items-center justify-between space-y-0 pb-2">
-                <h3 className="tracking-tight text-sm font-medium">Completion Rate</h3>
-                <svg
-                  className="h-4 w-4 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg>
+                <h3 className="tracking-tight text-sm font-medium">Avg. Uptime</h3>
+                <IconEye className="h-4 w-4 text-muted-foreground" />
               </div>
-              <div className="text-2xl font-bold">92%</div>
-              <p className="text-xs text-muted-foreground">+5% from last month</p>
+              <div className="text-2xl font-bold">99.8%</div>
+              <p className="text-xs text-muted-foreground">Last 30 days</p>
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <div className="col-span-4 rounded-lg border bg-card text-card-foreground">
               <div className="p-6 pb-2">
-                <h3 className="text-lg font-semibold">Recent Projects</h3>
-                <p className="text-sm text-muted-foreground">Your latest project activities</p>
+                <h3 className="text-lg font-semibold">Recent Agents</h3>
+                <p className="text-sm text-muted-foreground">Your latest agent activities</p>
               </div>
               <div className="p-6 pt-0">
                 <div className="space-y-4">
                   {[
                     {
-                      name: "E-commerce Platform",
-                      status: "In Progress",
-                      progress: 75,
-                      color: "bg-blue-500",
-                    },
-                    {
-                      name: "Mobile App Redesign",
-                      status: "Planning",
-                      progress: 25,
+                      name: "Customer Support Bot",
+                      status: "Active",
+                      requests: 1247,
                       color: "bg-green-500",
                     },
                     {
-                      name: "API Documentation",
-                      status: "Review",
-                      progress: 90,
-                      color: "bg-purple-500",
+                      name: "Content Moderator",
+                      status: "Paused",
+                      requests: 892,
+                      color: "bg-yellow-500",
                     },
                     {
-                      name: "Analytics Dashboard",
-                      status: "Completed",
-                      progress: 100,
-                      color: "bg-orange-500",
+                      name: "Data Processor",
+                      status: "Draft",
+                      requests: 0,
+                      color: "bg-gray-500",
                     },
-                  ].map((project, index) => (
+                  ].map((agent, index) => (
                     <div key={index} className="flex items-center space-x-4">
-                      <div className={`w-2 h-2 rounded-full ${project.color}`} />
+                      <div className={`w-2 h-2 rounded-full ${agent.color}`} />
                       <div className="flex-1 space-y-1">
-                        <p className="text-sm font-medium leading-none">{project.name}</p>
-                        <p className="text-xs text-muted-foreground">{project.status}</p>
+                        <p className="text-sm font-medium leading-none">{agent.name}</p>
+                        <p className="text-xs text-muted-foreground">{agent.status}</p>
                       </div>
-                      <div className="text-sm font-medium">{project.progress}%</div>
+                      <div className="text-sm font-medium">
+                        {agent.requests.toLocaleString()} requests
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -199,24 +148,44 @@ function RouteComponent() {
               </div>
               <div className="p-6 pt-0">
                 <div className="space-y-2">
-                  <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
-                    <div className="font-medium text-sm">Create New Project</div>
-                    <div className="text-xs text-muted-foreground">
-                      Start a new project workflow
-                    </div>
-                  </button>
-                  <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
-                    <div className="font-medium text-sm">Invite Team Member</div>
-                    <div className="text-xs text-muted-foreground">Add someone to your team</div>
-                  </button>
-                  <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
-                    <div className="font-medium text-sm">Generate Report</div>
-                    <div className="text-xs text-muted-foreground">Create project analytics</div>
-                  </button>
-                  <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
-                    <div className="font-medium text-sm">View Analytics</div>
-                    <div className="text-xs text-muted-foreground">Check performance metrics</div>
-                  </button>
+                  <Link to="/dashboard/agents/builder" className="block w-full">
+                    <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
+                      <div className="font-medium text-sm flex items-center gap-2">
+                        <IconPlus className="h-4 w-4" />
+                        Create New Agent
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Build an agent with natural language
+                      </div>
+                    </button>
+                  </Link>
+                  <Link to="/dashboard/deployments" className="block w-full">
+                    <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
+                      <div className="font-medium text-sm flex items-center gap-2">
+                        <IconRocket className="h-4 w-4" />
+                        Deploy to Cloudflare
+                      </div>
+                      <div className="text-xs text-muted-foreground">Deploy your latest agent</div>
+                    </button>
+                  </Link>
+                  <Link to="/dashboard/analytics" className="block w-full">
+                    <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
+                      <div className="font-medium text-sm flex items-center gap-2">
+                        <IconEye className="h-4 w-4" />
+                        View Analytics
+                      </div>
+                      <div className="text-xs text-muted-foreground">Check agent performance</div>
+                    </button>
+                  </Link>
+                  <Link to="/dashboard/deployments" className="block w-full">
+                    <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
+                      <div className="font-medium text-sm flex items-center gap-2">
+                        <IconCloud className="h-4 w-4" />
+                        Manage Deployments
+                      </div>
+                      <div className="text-xs text-muted-foreground">Control your live agents</div>
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

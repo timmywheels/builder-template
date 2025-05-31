@@ -14,10 +14,15 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
+  IconBot,
+  IconCloud,
+  IconRocket,
+  IconTerminal,
 } from "@/components/icons";
 
 import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
+import { NavAgents } from "@/components/nav-agents";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -44,9 +49,19 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "/dashboard/lifecycle",
-      icon: IconListDetails,
+      title: "Agents",
+      url: "/dashboard/agents",
+      icon: IconBot,
+    },
+    {
+      title: "Agent Builder",
+      url: "/dashboard/agents/builder",
+      icon: IconRocket,
+    },
+    {
+      title: "Deployments",
+      url: "/dashboard/deployments",
+      icon: IconCloud,
     },
     {
       title: "Analytics",
@@ -64,50 +79,50 @@ const data = {
       icon: IconUsers,
     },
   ],
-  navClouds: [
+  navAgents: [
     {
-      title: "Capture",
-      icon: IconCamera,
+      title: "Agent Builder",
+      icon: IconBot,
       isActive: true,
-      url: "#",
+      url: "/dashboard/agents/builder",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Create New Agent",
+          url: "/dashboard/agents/builder",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "View All Agents",
+          url: "/dashboard/agents",
         },
       ],
     },
     {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
+      title: "Deployments",
+      icon: IconRocket,
+      url: "/dashboard/deployments",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Active Deployments",
+          url: "/dashboard/deployments/active",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "Deploy History",
+          url: "/dashboard/deployments/history",
         },
       ],
     },
     {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
+      title: "Monitoring",
+      icon: IconTerminal,
+      url: "/dashboard/monitoring",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Logs",
+          url: "/dashboard/monitoring/logs",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "Performance",
+          url: "/dashboard/monitoring/performance",
         },
       ],
     },
@@ -162,6 +177,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
+        <NavAgents items={data.navAgents} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

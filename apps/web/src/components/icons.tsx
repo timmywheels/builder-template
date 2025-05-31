@@ -57,6 +57,23 @@ export {
   // Icons used in projects page
   Calendar as IconCalendar,
 
+  // Agent-related icons
+  Bot as IconBot,
+  Cpu as IconCpu,
+  Cloud as IconCloud,
+  Zap as IconZap,
+  Code as IconCode,
+  Play as IconPlay,
+  Pause as IconPause,
+  Square as IconStop,
+  Upload as IconUpload,
+  Download as IconDownload,
+  Globe as IconGlobe,
+  Rocket as IconRocket,
+  Cog as IconCog,
+  Terminal as IconTerminal,
+  GitBranch as IconGitBranch,
+
   // Type for icon props
   type LucideIcon as Icon,
 } from "lucide-react";
