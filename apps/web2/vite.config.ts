@@ -11,4 +11,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./app"),
     },
   },
+  server: {
+    proxy: {
+      "/api/auth": {
+        target: "http://localhost:5000", // API runs on port 5000
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/auth/, "/auth"),
+      },
+    },
+  },
 });

@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Button } from "./ui/button";
 import { CheckCircle2 } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { Link } from "react-router";
 
 interface PricingCardProps {
   name: string;
@@ -69,8 +70,9 @@ export function PricingCard({
         <Button
           className="w-full font-medium text-xs h-9 border-gray-300/70 dark:border-gray-700/70 hover:border-gray-400 dark:hover:border-gray-600 transition-all"
           variant={highlighted ? "default" : "outline"}
+          asChild
         >
-          Start 7-day Free Trial
+          <Link to="/register">Start 7-day Free Trial</Link>
         </Button>
       </CardContent>
     </Card>

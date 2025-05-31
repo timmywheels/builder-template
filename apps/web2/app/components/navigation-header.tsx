@@ -1,113 +1,127 @@
 import { Link } from "react-router";
 import { Button } from "./ui/button";
+import { useAuthContext } from "../lib/auth";
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "./ui/navigation-menu";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { Menu, Sparkles } from "lucide-react";
-import { useState } from "react";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { User, LogOut, Settings } from "lucide-react";
 
 export function NavigationHeader() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuthContext();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
-        <div className="flex h-12 items-center justify-between">
+        <div className="flex h-14 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-base font-medium">AI Monitor</span>
+            <span className="font-medium text-lg">AI Monitor</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <NavigationMenu>
-              <NavigationMenuList className="flex space-x-5">
-                <NavigationMenuItem>
-                  <Link
-                    to="/resources"
-                    className="text-xs font-normal transition-colors hover:text-primary"
-                  >
-                    Resources
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link
-                    to="/agencies"
-                    className="text-xs font-normal transition-colors hover:text-primary"
-                  >
-                    Agencies
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link
-                    to="/pricing"
-                    className="text-xs font-normal transition-colors hover:text-primary"
-                  >
-                    Pricing
-                  </Link>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </nav>
-
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center space-x-3">
-            <Button variant="ghost" size="sm" className="font-medium h-8 text-xs">
-              Book a demo
-            </Button>
-            <Button size="sm" className="gap-1.5 font-medium h-8 text-xs">
-              <span>Start 7-day trial</span>
-              <Sparkles className="h-3 w-3" />
-            </Button>
-          </div>
-
-          {/* Mobile Menu */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col space-y-4 mt-8">
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-6 text-xs">
+            {isAuthenticated ? (
+              <>
                 <Link
-                  to="/resources"
-                  className="text-lg font-normal transition-colors hover:text-primary"
-                  onClick={() => setIsOpen(false)}
+                  to="/dashboard"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Resources
+                  Dashboard
                 </Link>
                 <Link
-                  to="/agencies"
-                  className="text-lg font-normal transition-colors hover:text-primary"
-                  onClick={() => setIsOpen(false)}
+                  to="/monitors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Agencies
+                  Monitors
+                </Link>
+                <Link
+                  to="/analytics"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Analytics
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/features"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Features
                 </Link>
                 <Link
                   to="/pricing"
-                  className="text-lg font-normal transition-colors hover:text-primary"
-                  onClick={() => setIsOpen(false)}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Pricing
                 </Link>
-                <div className="pt-4 space-y-3">
-                  <Button variant="outline" className="w-full font-medium">
-                    Book a demo
+                <Link
+                  to="/about"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  About
+                </Link>
+              </>
+            )}
+          </nav>
+
+          {/* CTA / User Menu */}
+          <div className="flex items-center space-x-4">
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="text-xs">
+                        {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
                   </Button>
-                  <Button className="w-full gap-2 font-medium">
-                    <span>Start 7-day trial</span>
-                    <Sparkles className="h-4 w-4" />
-                  </Button>
-                </div>
-              </nav>
-            </SheetContent>
-          </Sheet>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild className="text-xs">
+                  <Link to="/login">Sign in</Link>
+                </Button>
+                <Button size="sm" asChild className="text-xs">
+                  <Link to="/register">Get started</Link>
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </header>

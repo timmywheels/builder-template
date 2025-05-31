@@ -39,13 +39,23 @@ export function HeroSection() {
             <Button
               size="default"
               className="gap-2 text-xs font-medium px-5 border border-gray-900 dark:border-gray-100 hover:border-gray-700 dark:hover:border-gray-300 transition-all"
+              asChild
             >
-              Start free 7-day trial
-              <ArrowRight className="h-3.5 w-3.5" />
+              <Link to="/register">
+                Start free 7-day trial
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </Button>
-            <Button size="default" variant="outline" className="gap-2 text-xs font-medium px-5">
-              <PlayCircle className="h-3.5 w-3.5" />
-              Watch 2-min demo
+            <Button
+              size="default"
+              variant="outline"
+              className="gap-2 text-xs font-medium px-5"
+              asChild
+            >
+              <Link to="/demo">
+                <PlayCircle className="h-3.5 w-3.5" />
+                Watch 2-min demo
+              </Link>
             </Button>
           </div>
 

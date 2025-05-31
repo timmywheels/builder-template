@@ -1,4 +1,5 @@
 import type { Route } from "./+types/home";
+import { Link } from "react-router";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
@@ -233,9 +234,12 @@ export default function Home() {
                 variant="outline"
                 size="sm"
                 className="gap-2 text-xs font-medium border-gray-300/70 dark:border-gray-700/70 hover:border-gray-400 dark:hover:border-gray-600 transition-all"
+                asChild
               >
-                <Calculator className="h-3.5 w-3.5" />
-                Calculate your potential ROI
+                <Link to="/calculator">
+                  <Calculator className="h-3.5 w-3.5" />
+                  Calculate your potential ROI
+                </Link>
               </Button>
             </div>
           </div>
@@ -700,8 +704,9 @@ export default function Home() {
                 <Button
                   className="w-full font-medium text-xs h-9 border-gray-300/70 dark:border-gray-700/70 hover:border-gray-400 dark:hover:border-gray-600 transition-all"
                   variant="outline"
+                  asChild
                 >
-                  Contact Sales
+                  <Link to="/contact">Contact Sales</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -815,13 +820,18 @@ export default function Home() {
             <Button
               size="lg"
               className="text-sm font-medium border-gray-900 dark:border-gray-100 hover:border-gray-700 dark:hover:border-gray-300 transition-all"
+              asChild
             >
-              Start Free 7-Day Trial
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <Link to="/register">
+                Start Free 7-Day Trial
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-sm font-medium">
-              <PlayCircle className="mr-2 h-4 w-4" />
-              Watch 2-min Demo
+            <Button size="lg" variant="outline" className="text-sm font-medium" asChild>
+              <Link to="/demo">
+                <PlayCircle className="mr-2 h-4 w-4" />
+                Watch 2-min Demo
+              </Link>
             </Button>
           </div>
 
